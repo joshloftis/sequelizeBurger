@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 3000;
 
+var db = require("./models");
+
 const app = express();
 
 app.use(express.static("public"));
@@ -21,4 +23,8 @@ const router = require("./controllers/burgers_controllers.js");
 
 app.use("/", router);
 
-app.listen(PORT);
+db.sequelize.sync({ force: true }).then(function() {
+  app.listen(PORT, function() {
+    console.log("App listening on PORT " + PORT);
+  });
+});
